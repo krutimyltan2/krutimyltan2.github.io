@@ -1,0 +1,87 @@
+
+                       -= 2024-05-29 =-
+         ____  __________  _   ________________________   __
+        / __ )/ ____/ __ \/ | / / ___/_  __/ ____/  _/ | / /
+       / __  / __/ / /_/ /  |/ /\__ \ / / / __/  / //  |/ / 
+      / /_/ / /___/ _, _/ /|  /___/ // / / /____/ // /|  /  
+     /_____/_____/_/ |_/_/ |_//____//_/ /_____/___/_/ |_/   
+                                                            
+                          _    _______
+                         | |  / / ___/
+                         | | / /\__ \ 
+                         | |/ /___/ / 
+                         |___//____/  
+                                      
+         ____  ________    ____  ___________ __ __ ______
+        / __ \/ ____/ /   / __ \/ ____/ ___// //_// ____/
+       / /_/ / __/ / /   / / / / /_   \__ \/ ,<  / __/   
+      / ____/ /___/ /___/ /_/ / __/  ___/ / /| |/ /___   
+     /_/   /_____/_____/\____/_/    /____/_/ |_/_____/   
+
+
+-- 0 - Introduction
+
+This page contains the results of a comparison of the Pelofske GCD
+algorithm (as described in preprint [2]). We are not able to replicate
+the results, and to the contrary we find that the old Batch GCD
+algorithm [1] is significantly faster than Pelofke's algorithm. Our
+testing was done using a reimplementation of both algorithms in C
+relying on the FLINTLIB (https://flintlib.org) library for fast
+multi-precision integer algorithms.
+
+
+-- 1 - About the implementation
+
+-- 2 - Plots and comparisons
+
+-- 3 - Explaining the difference
+
+-- References
+
+[1] Daniel Bernstein. "Batch gcd".
+  https://facthacks.cr.yp.to/batchgcd.html.
+
+[2] Elijah Pelofske. "An Efficient All-to-All GCD Algorithm for Low
+  Entropy RSA Key Factorization."
+  https://eprint.iacr.org/2024/699.
+
+
+
+
+==================================
+-- 1 - Build
+
+On BSD
+
+  $ make
+
+usually works. On Linux one might have to use
+
+  $ bmake
+
+
+-- 2 - Generation of keys
+
+  $ ./tools/gen 1000000 1024 > /tmp/primes_1024.txt
+  $ ./tools/gen 1000000 2048 > /tmp/primes_2048.txt
+
+
+-- 3 - Spew test files
+
+To get the test cases that correspond to those in [1] one can use the
+py/spew.py utility. It will produce some generated test cases for that
+one may run the timing on.
+
+This produces test files in the generated/ subdirectory, assuming it
+exist.
+
+
+-- 4 - Timing
+
+Run
+
+  $ ./timer.sh
+
+this will also produce the files /tmp/timing_0512_nnnn.txt and
+/tmp/timing_1024_nnnn.txt that contains a clean list of the timing results
+(that can be used in plots for example), and accompanying plots.
