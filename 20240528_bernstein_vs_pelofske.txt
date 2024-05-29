@@ -24,9 +24,9 @@
 This page contains the results of a comparison of the Pelofske GCD
 algorithm (as described in preprint [2]). We are not able to replicate
 the results, and to the contrary we find that the old Batch GCD
-algorithm [1] is significantly faster than Pelofke's algorithm. Our
-testing was done using a reimplementation of both algorithms in C
-relying on the FLINTLIB (https://flintlib.org) library for fast
+algorithm [1] is significantly faster than Pelofske's algorithm. Our
+testing was done using a re-implementation of both algorithms in C
+relying on the FLINT (https://flintlib.org) library for fast
 multi-precision integer algorithms.
 
 
@@ -34,7 +34,7 @@ multi-precision integer algorithms.
 
 The original implementation of the Batch GCD algorithm was a Sage/Python
 implementation [1] that seems to have been created just to illustrate
-the algorithm. The Pelofkse GCD algorithm was implemented, also in
+the algorithm. The Pelofske GCD algorithm was implemented, also in
 Python, here:
 
   https://github.com/epelofske65537/binary_tree_Batch_GCD
@@ -50,7 +50,7 @@ is that this gives a more fair comparison than what is done in [2],
 since there it is only two "demo implementations" that are compared.
 
 Our implementation of the algorithms, and the program one used to
-compute the timings is available on Github at:
+compute the timings is available on GitHub at:
 
   https://github.com/krutimyltan2/bernstein_vs_pelofske
 
@@ -132,7 +132,7 @@ tabulated.
       +----------------------------------------------------------+
 
 
-A complete collection of timing results are availible at
+A complete collection of timing results are available at
 
   https://krutimyltan2.github.io/results/timing_0512_0002.txt
 
@@ -143,6 +143,10 @@ Nobody knows what Python does in the background. There is probably some
 Wizard out there that can profile Python implementations, and see what
 it is in the Batch GCD implementation that makes it so slow. It is
 probably some hidden allocations somewhere.
+
+Another, also quite likely, explanation is that we have made a mistake
+when implementing the Pelofske GCD algorithm due to us misunderstanding
+some part of it.
 
 
 -- References
