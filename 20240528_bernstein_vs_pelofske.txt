@@ -134,7 +134,12 @@ tabulated.
 
 A complete collection of timing results are available at
 
-  https://krutimyltan2.github.io/results/timing_0512_0002.txt
+  https://krutimyltan2.github.io/results/timing_0512_0002.txt,
+  https://krutimyltan2.github.io/results/timing_0512_0100.txt,
+  https://krutimyltan2.github.io/results/timing_0512_1000.txt,
+  https://krutimyltan2.github.io/results/timing_1024_0002.txt,
+  https://krutimyltan2.github.io/results/timing_1024_0100.txt, and
+  https://krutimyltan2.github.io/results/timing_1024_1000.txt.
 
 
 -- 3 - Explaining the difference
