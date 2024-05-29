@@ -32,9 +32,118 @@ multi-precision integer algorithms.
 
 -- 1 - About the implementation
 
+The original implementation of the Batch GCD algorithm was a Sage/Python
+implementation [1] that seems to have been created just to illustrate
+the algorithm. The Pelofkse GCD algorithm was implemented, also in
+Python, here:
+
+  https://github.com/epelofske65537/binary_tree_Batch_GCD
+
+It is these two Python implementations that are compared in the preprint
+[2]. However, it is not realistic that you want to use these
+implementations in a real setting since they are slow (as it is Python -
+with all the hidden control flow and allocation that implies). Therefore
+we implemented both the original Batch GCD algorithm and the Pelofske
+GCD algorithm in C, using the highly performant FLINT library for some
+number theoretic (arithmetic) multiprecision operations. The intention
+is that this gives a more fair comparison than what is done in [2],
+since there it is only two "demo implementations" that are compared.
+
+Our implementation of the algorithms, and the program one used to
+compute the timings is available on Github at:
+
+  https://github.com/krutimyltan2/bernstein_vs_pelofske
+
+
 -- 2 - Plots and comparisons
 
+The implementation of the Pelofske GCD algorithm, as implemented in this
+comparison is consistently about 2x _slower_ than the old BatchGCD
+algorithms.
+
+For a quick overview, see the plots here:
+
+  https://krutimyltan2.github.io/20240528_bernstein_vs_pelofske_plots.html
+
+
+-- 2.1 - Timing results
+
+Here are a couple of samples of the timing results of our comparison
+tabulated.
+
+  Modulus bit length 1024.
+
+    Number of weak (pairs of) keys: 2.
+
+      +----------------------------------------------------------+
+      | # of keys | # seconds batch_gcd | # seconds pelofske_gcd |
+      +-----------+---------------------+------------------------+
+      |  15000    |            3.470000 |               5.890000 |
+      |  20000    |            5.050000 |               8.900000 |
+      |  25000    |            6.870000 |              12.070000 |
+      |  30000    |            8.590000 |              15.560000 |
+      |  35000    |           10.880000 |              19.250000 |
+      |  40000    |           12.640000 |              22.510000 |
+      |  45000    |           14.680000 |              26.250000 |
+      |  50000    |           16.900000 |              30.530000 |
+      |  55000    |           18.550000 |              34.690000 |
+      |  60000    |           21.030000 |              39.630000 |
+      |  65000    |           23.170000 |              45.680000 |
+      |  70000    |           26.290000 |              50.120000 |
+      |  75000    |           28.100000 |              52.440000 |
+      |  80000    |           30.380000 |              57.110000 |
+      |  85000    |           32.650000 |              60.550000 |
+      |  90000    |           35.280000 |              65.940000 |
+      |  95000    |           36.840000 |              70.690000 |
+      | 100000    |           40.030000 |              76.430000 |
+      | 105000    |           42.040000 |              81.300000 |
+      | 110000    |           44.440000 |              86.320000 |
+      | 115000    |           47.430000 |              92.600000 |
+      | 120000    |           49.900000 |              97.860000 |
+      +----------------------------------------------------------+
+
+  Modulus bit length 2048.
+
+    Number of weak (pairs of) keys: 100.
+
+      +----------------------------------------------------------+
+      | # of keys | # seconds batch_gcd | # seconds pelofske_gcd |
+      +-----------+---------------------+------------------------+
+      |  15000    |            9.100000 |              16.810000 |
+      |  20000    |           12.950000 |              24.260000 |
+      |  25000    |           17.250000 |              32.220000 |
+      |  30000    |           21.070000 |              41.390000 |
+      |  35000    |           26.460000 |              50.780000 |
+      |  40000    |           30.460000 |              58.880000 |
+      |  45000    |           35.180000 |              67.820000 |
+      |  50000    |           40.240000 |              78.340000 |
+      |  55000    |           44.100000 |              88.510000 |
+      |  60000    |           49.560000 |             100.180000 |
+      |  65000    |           54.320000 |             114.410000 |
+      |  70000    |           61.290000 |             123.370000 |
+      |  75000    |           66.430000 |             131.980000 |
+      |  80000    |           71.180000 |             142.070000 |
+      |  85000    |           76.200000 |             154.430000 |
+      |  90000    |           83.120000 |             167.410000 |
+      |  95000    |           86.840000 |             185.420000 |
+      | 100000    |           97.620000 |             193.500000 |
+      | 105000    |           99.720000 |             205.850000 |
+      | 110000    |          106.030000 |             220.490000 |
+      +----------------------------------------------------------+
+
+
+A complete collection of timing results are availible at
+
+  https://krutimyltan2.github.io/results/timing_0512_0002.txt
+
+
 -- 3 - Explaining the difference
+
+Nobody knows what Python does in the background. There is probably some
+Wizard out there that can profile Python implementations, and see what
+it is in the Batch GCD implementation that makes it so slow. It is
+probably some hidden allocations somewhere.
+
 
 -- References
 
@@ -44,44 +153,3 @@ multi-precision integer algorithms.
 [2] Elijah Pelofske. "An Efficient All-to-All GCD Algorithm for Low
   Entropy RSA Key Factorization."
   https://eprint.iacr.org/2024/699.
-
-
-
-
-==================================
--- 1 - Build
-
-On BSD
-
-  $ make
-
-usually works. On Linux one might have to use
-
-  $ bmake
-
-
--- 2 - Generation of keys
-
-  $ ./tools/gen 1000000 1024 > /tmp/primes_1024.txt
-  $ ./tools/gen 1000000 2048 > /tmp/primes_2048.txt
-
-
--- 3 - Spew test files
-
-To get the test cases that correspond to those in [1] one can use the
-py/spew.py utility. It will produce some generated test cases for that
-one may run the timing on.
-
-This produces test files in the generated/ subdirectory, assuming it
-exist.
-
-
--- 4 - Timing
-
-Run
-
-  $ ./timer.sh
-
-this will also produce the files /tmp/timing_0512_nnnn.txt and
-/tmp/timing_1024_nnnn.txt that contains a clean list of the timing results
-(that can be used in plots for example), and accompanying plots.
